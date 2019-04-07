@@ -4,6 +4,7 @@ import 'package:food_finder/pages/home_page.dart';
 import 'package:food_finder/pages/search_page.dart';
 import 'package:food_finder/pages/search_result_page.dart';
 import 'package:splashscreen/splashscreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(MyApp());
 
@@ -53,5 +54,3 @@ class _SplashScreenState extends State<SplashScreenPage> {
         );
     }
 }
-
-
