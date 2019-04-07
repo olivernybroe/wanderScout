@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 final _random = new Random();
 
@@ -88,6 +91,8 @@ class _SearchResultPageState extends State<SearchResultPage> {
 
 
 class SecondRoute extends StatelessWidget {
+    Completer<GoogleMapController> _controller = Completer();
+
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -110,67 +115,61 @@ class SecondRoute extends StatelessWidget {
         );
     }
 
-    Container _buildButtonSection(BuildContext context) {
-      return Container(
-          child: Column(
-              children: <Widget>[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                          //_buildButtonColumn(color, Icons.call, 'CALL'),
-                          _buildButtonColumn(Theme.of(context).primaryColor, Icons.near_me, 'ROUTE'),
-                          //_buildButtonColumn(color, Icons.share, 'SHARE'),
-                      ],
-                  ),
-              ],
-          ),
-      );
+    Widget _buildButtonSection(BuildContext context) {
+        var storeLatLng = LatLng(55.7708141, 12.5042006);
+        var storeMarker = Marker(
+            markerId: MarkerId("Store"),
+            infoWindow: InfoWindow(
+                title: "Meny - SuperMarket",
+                snippet: "You can buy Aqua d'or here.",
+            ),
+            position: storeLatLng
+        );
+
+        return SizedBox(
+            width: 300,
+            height: 300,
+            child: GoogleMap(
+                markers: Set.from([
+                    storeMarker
+                ]),
+                myLocationEnabled: true,
+                mapType: MapType.normal,
+                initialCameraPosition: CameraPosition(
+                    target: storeLatLng,
+                    zoom: 14.4746,
+                ),
+                tiltGesturesEnabled: false,
+                onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                },
+            ),
+        );
     }
 
     Container _buildDescriptionSection() {
-      return Container(
-          padding: const EdgeInsets.all(32),
-          child: Row(
-              children: [
-                  Expanded(
-                      /*1*/
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                              Text(
-                                  'Lyngby, Copenhagen, Denmark. \n \n'
-                                      'Distance: 1.6 KM \n \n'
-                                      'Description: Aqua Doer is a famous brand for sparkling water in Denmark.',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 112, 112, 112)
-                                  ),
-                              ),
-                          ],
-                      ),
-                  ),
-                  /*3*/
-              ],
-          ),
-      );
-    }
-    Column _buildButtonColumn(Color color, IconData icon, String label) {
-        return Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-                Icon(icon, color: color),
-                Container(
-                    margin: const EdgeInsets.only(top: 8),
-                    child: Text(
-                        label,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: color,
+        return Container(
+            padding: const EdgeInsets.all(32),
+            child: Row(
+                children: [
+                    Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                                Text(
+                                    'Lyngby, Copenhagen, Denmark. \n \n'
+                                        'Distance: 1.6 KM \n \n'
+                                        'Description: Aqua Doer is a famous brand for sparkling water in Denmark.',
+                                    style: TextStyle(
+                                        color: Color.fromARGB(
+                                            255, 112, 112, 112)
+                                    ),
+                                ),
+                            ],
                         ),
                     ),
-                ),
-            ],
+                ],
+            ),
         );
     }
 }

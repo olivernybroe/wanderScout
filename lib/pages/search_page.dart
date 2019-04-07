@@ -55,7 +55,7 @@ class _SearchScreenState extends State<SearchPage>  {
 
     Widget _buildListTile(title, url) {
         var icon = CircleAvatar(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.transparent,
             child: Image.network(url),
         );
 
